@@ -1,0 +1,3 @@
+rootProject.name = 'credit_card_checker_ios'
+
+include ':app'
