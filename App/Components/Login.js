@@ -5,6 +5,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableHighlight,
+  ActivityIndicatorIOS,
 } from 'react-native'
 
 import api from "../Api"
@@ -16,16 +17,19 @@ class Login extends Component {
       email: '',
       password: '',
       error: false,
+      isLoading: false,
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.errorView = this.errorView.bind(this);
+    this.activityIndicatorView = this.activityIndicatorView.bind(this);
   }
 
   handleSubmit(event){
     this.setState({
-      error: false
+      error: false,
+      isLoading: true,
     })
     api.createSession(this.state.email, this.state.password)
       .then((res) => {
@@ -33,7 +37,7 @@ class Login extends Component {
         if(res.ok){
           console.log("Signed In!", "Response:", res)
         } else {
-          res.json().then((json) => this.setState({error: json["error"]}))
+          res.json().then((json) => this.setState({error: json["error"], isLoading: false}))
         }
       }).catch((res) => {
         this.setState({error: "Something went wrong"})
@@ -62,6 +66,18 @@ class Login extends Component {
     }
   }
 
+  activityIndicatorView(){
+    if(this.state.isLoading){
+      return <ActivityIndicatorIOS
+                animating={true}
+                color="#111"
+                size="small"
+                style={styles.activityIndicator}/>
+    } else {
+      return <View />
+    }
+  }
+
   render(){
     return (
       <View style={styles.mainContainer}>
@@ -73,13 +89,16 @@ class Login extends Component {
             <TextInput style={styles.password} placeholder="Password"
               secureTextEntry={true} onChange={this.handlePasswordChange}/>
           </View>
-          {this.errorView()}
           <TouchableHighlight
             style={styles.button}
             onPress={this.handleSubmit}
-            underlayColor="white">
-              <Text style={styles.buttonText}>Login</Text>
+            underlayColor="black">
+              <View style={styles.buttonContent}>
+                <Text style={styles.buttonText}>Login</Text>
+                {this.activityIndicatorView()}
+              </View>
           </TouchableHighlight>
+          {this.errorView()}
         </View>
       </View>
     )
@@ -151,7 +170,14 @@ var styles = StyleSheet.create({
   },
   errorView: {
     color: 'red'
-  }
+  },
+  buttonContent: {
+    flexDirection: 'row',
+  },
+  activityIndicator: {
+    paddingLeft: 10,
+  },
+
 });
 
 
