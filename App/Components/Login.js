@@ -8,8 +8,6 @@ import {
   ActivityIndicatorIOS,
 } from 'react-native'
 
-import api from "../Api"
-
 class Login extends Component {
   constructor(props){
     super(props);
@@ -31,7 +29,7 @@ class Login extends Component {
       error: false,
       isLoading: true,
     })
-    api.createSession(this.state.email, this.state.password)
+    this.props.api.createSession(this.state.email, this.state.password)
       .then((res) => {
         console.log("Response:", res)
         if(res.ok){

@@ -6,6 +6,7 @@ import {
 
 import Login from "./Login"
 import ExpenseList from "./ExpenseList"
+import api from "../Api"
 
 class Main extends Component {
   constructor(props){
@@ -22,7 +23,7 @@ class Main extends Component {
 
   render(){
     if(this.state.authToken == null){
-      return <Login onAuthentication={this.setAuthToken} />
+      return <Login onAuthentication={this.setAuthToken} api={api} />
     } else {
       return <ExpenseList />
     }
