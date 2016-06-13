@@ -7,9 +7,59 @@ import {
   TouchableHighlight,
 } from 'react-native'
 
+import api from "../Api"
+
 class Login extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      email: '',
+      password: '',
+      error: false,
+    }
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.errorView = this.errorView.bind(this);
+  }
+
+  handleSubmit(event){
+    this.setState({
+      error: false
+    })
+    api.createSession(this.state.email, this.state.password)
+      .then((res) => {
+        console.log("Response:", res)
+        if(res.ok){
+          console.log("Signed In!", "Response:", res)
+        } else {
+          res.json().then((json) => this.setState({error: json["error"]}))
+        }
+      }).catch((res) => {
+        this.setState({error: "Something went wrong"})
+      })
+  }
+
+  handleEmailChange(event){
+    this.setState({
+      email: event.nativeEvent.text,
+      error: false,
+    })
+  }
+
+  handlePasswordChange(event){
+    this.setState({
+      password: event.nativeEvent.text,
+      error: false,
+    })
+  }
+
+  errorView(){
+    if(this.state.error){
+      return <Text style={styles.errorView}>{this.state.error}</Text>
+    } else {
+      return <View />
+    }
   }
 
   render(){
@@ -18,11 +68,12 @@ class Login extends Component {
         <View style={styles.container}>
           <View style={styles.formContainer}>
             <TextInput style={styles.email} placeholder="Email"
-              autofocus="true" />
+              autofocus="true" onChange={this.handleEmailChange} />
             <View style={styles.separator} />
             <TextInput style={styles.password} placeholder="Password"
-              secureTextEntry="true"/>
+              secureTextEntry={true} onChange={this.handlePasswordChange}/>
           </View>
+          {this.errorView()}
           <TouchableHighlight
             style={styles.button}
             onPress={this.handleSubmit}
@@ -53,7 +104,6 @@ var styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     borderRadius: 8,
-    color: 'black',
   },
   separator: {
     height: 1,
@@ -98,6 +148,9 @@ var styles = StyleSheet.create({
   },
   rowContent: {
     fontSize: 19
+  },
+  errorView: {
+    color: 'red'
   }
 });
 
