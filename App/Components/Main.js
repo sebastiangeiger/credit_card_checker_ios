@@ -5,21 +5,27 @@ import {
 } from 'react-native'
 
 import Login from "./Login"
+import ExpenseList from "./ExpenseList"
 
 class Main extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      authToken: null
+    }
     this.setAuthToken = this.setAuthToken.bind(this);
   }
 
   setAuthToken(authToken){
-    console.log("Auth token set:", authToken);
+    this.setState({authToken: authToken});
   }
 
   render(){
-    return (
-      <Login onAuthentication={this.setAuthToken} />
-    )
+    if(this.state.authToken == null){
+      return <Login onAuthentication={this.setAuthToken} />
+    } else {
+      return <ExpenseList />
+    }
   }
 }
 
