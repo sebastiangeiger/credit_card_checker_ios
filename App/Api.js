@@ -1,5 +1,6 @@
 let baseUrl = 'http://localhost:5000/api';
-var api = {
+
+class Api {
   createSession(email, password){
     var headers = new Headers();
     headers.append("Content-Type", "application/json");
@@ -12,7 +13,7 @@ var api = {
       body: JSON.stringify(body)
     };
     return fetch(url, payload)
-  },
+  }
 }
 
-export default api
+export default Api
