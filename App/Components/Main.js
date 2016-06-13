@@ -15,10 +15,19 @@ class Main extends Component {
       authToken: null
     }
     this.setAuthToken = this.setAuthToken.bind(this);
+    this.getExpenses = this.getExpenses.bind(this);
   }
 
   setAuthToken(authToken){
-    this.setState({authToken: authToken});
+    this.setState({authToken: authToken}, this.getExpenses);
+  }
+
+  getExpenses(){
+    let api = new Api(this.state.authToken);
+    api.getExpenses().then((res) =>{
+      console.log(res);
+      res.json().then((json) => console.log("Expenses:", json));
+    })
   }
 
   render(){

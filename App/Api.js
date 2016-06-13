@@ -1,6 +1,21 @@
 let baseUrl = 'http://localhost:5000/api';
 
 class Api {
+  constructor(authToken){
+    this.authToken = authToken;
+  }
+  getExpenses(){
+    var headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("Authorization", "Token token="+this.authToken);
+    console.log("authToken", this.authToken);
+    let url = baseUrl + "/expenses";
+    let payload = {
+      headers: headers
+    }
+    return fetch(url, payload)
+  }
+
   createSession(email, password){
     var headers = new Headers();
     headers.append("Content-Type", "application/json");
