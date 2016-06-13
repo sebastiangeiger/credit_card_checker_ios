@@ -35,7 +35,11 @@ class Login extends Component {
       .then((res) => {
         console.log("Response:", res)
         if(res.ok){
-          console.log("Signed In!", "Response:", res)
+          res.json().then((json) => {
+            this.setState({isLoading: false})
+            let authToken = json["session"]["auth_token"]
+            this.props.onAuthentication(authToken);
+          })
         } else {
           res.json().then((json) => this.setState({error: json["error"], isLoading: false}))
         }
@@ -103,6 +107,10 @@ class Login extends Component {
       </View>
     )
   }
+}
+
+Login.propTypes = {
+  onAuthentication: React.PropTypes.func.isRequired
 }
 
 var styles = StyleSheet.create({
