@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Text,
-  View,
+  AsyncStorage,
 } from 'react-native'
 
 import Login from "./Login"
@@ -16,10 +15,20 @@ class Main extends Component {
     }
     this.setAuthToken = this.setAuthToken.bind(this);
     this.getExpenses = this.getExpenses.bind(this);
+    this.readAuthTokenFromStorage()
+  }
+
+  readAuthTokenFromStorage(){
+    AsyncStorage.getItem('authToken')
+      .then(authToken => this.setState({authToken: authToken}))
+      .then(this.getExpenses)
   }
 
   setAuthToken(authToken){
-    this.setState({authToken: authToken}, this.getExpenses);
+    this.setState({authToken: authToken}, () => {
+      this.getExpenses();
+      AsyncStorage.setItem('authToken', authToken)
+    })
   }
 
   getExpenses(){
