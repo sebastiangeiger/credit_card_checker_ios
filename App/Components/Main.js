@@ -11,7 +11,8 @@ class Main extends Component {
   constructor(props){
     super(props);
     this.state = {
-      authToken: null
+      authToken: null,
+      expenses: [],
     }
     this.setAuthToken = this.setAuthToken.bind(this);
     this.getExpenses = this.getExpenses.bind(this);
@@ -34,8 +35,10 @@ class Main extends Component {
   getExpenses(){
     let api = new Api(this.state.authToken);
     api.getExpenses().then((res) =>{
-      console.log(res);
-      res.json().then((json) => console.log("Expenses:", json));
+      res.json().then((json) => {
+        console.log(json);
+        this.setState({expenses: json["expenses"]})
+      });
     })
   }
 
@@ -43,7 +46,7 @@ class Main extends Component {
     if(this.state.authToken == null){
       return <Login onAuthentication={this.setAuthToken} api={new Api()} />
     } else {
-      return <ExpenseList />
+      return <ExpenseList expenses={this.state.expenses}/>
     }
   }
 }
