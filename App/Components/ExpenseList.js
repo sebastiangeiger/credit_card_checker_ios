@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 
 class ExpenseList extends Component {
+
   constructor(props){
     super(props);
   }
@@ -15,7 +16,7 @@ class ExpenseList extends Component {
     return (
       <View style={styles.rowContainer}>
         <Text>{expense.merchant_name}</Text>
-        <Text>{expense.time_of_sale}</Text>
+        <Text>{expense.time_of_sale.toString()}</Text>
         <Text>{expense.payment_method_name}</Text>
         <Text>{expense.amount_in_cents}</Text>
       </View>
