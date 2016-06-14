@@ -17,6 +17,7 @@ class ExpenseList extends Component {
         <Text>{expense.merchant_name}</Text>
         <Text>{expense.time_of_sale}</Text>
         <Text>{expense.payment_method_name}</Text>
+        <Text>{expense.amount_in_cents}</Text>
       </View>
     )
   }
@@ -49,8 +50,9 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
-    marginTop: 50,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginTop: 74,
   },
   rowContainer: {
     flex: 1,
