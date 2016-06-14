@@ -5,6 +5,7 @@ import {
 
 import Login from "./Login"
 import ExpenseList from "./ExpenseList"
+import LoadingScreen from "./LoadingScreen"
 import Api from "../Api"
 
 class Main extends Component {
@@ -13,6 +14,7 @@ class Main extends Component {
     this.state = {
       authToken: null,
       expenses: [],
+      loadingFromStorage: true,
     }
     this.setAuthToken = this.setAuthToken.bind(this);
     this.getExpenses = this.getExpenses.bind(this);
@@ -24,6 +26,8 @@ class Main extends Component {
       .then(authToken => {
         if(authToken !== null) {
           this.setState({authToken: authToken}, this.readExpensesFromStorageAndUpdate);
+        } else {
+          this.setState({loadingFromStorage: false});
         }
       })
   }
@@ -38,7 +42,7 @@ class Main extends Component {
   readExpensesFromStorageAndUpdate(){
     if(this.state.authToken !== null){
       AsyncStorage.getItem('expenses')
-        .then((expenses) => this.setState({expenses: JSON.parse(expenses)}, this.getExpenses))
+        .then((expenses) => this.setState({expenses: JSON.parse(expenses), loadingFromStorage: false}, this.getExpenses))
     }
   }
 
@@ -60,7 +64,9 @@ class Main extends Component {
   }
 
   render(){
-    if(this.state.authToken == null){
+    if(this.state.loadingFromStorage){
+      return <LoadingScreen />
+    } else if(this.state.authToken == null){
       return <Login onAuthentication={this.setAuthToken} api={new Api()} />
     } else {
       return <ExpenseList expenses={this.state.expenses}/>
