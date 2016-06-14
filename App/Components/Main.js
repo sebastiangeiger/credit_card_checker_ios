@@ -21,7 +21,9 @@ class Main extends Component {
 
   readAuthTokenFromStorage(){
     AsyncStorage.getItem('authToken')
-      .then(authToken => this.setState({authToken: authToken}))
+      .then(authToken => {
+        if(authToken !== null) { this.setState({authToken: authToken}) }
+        })
       .then(this.getExpenses)
   }
 
@@ -33,13 +35,14 @@ class Main extends Component {
   }
 
   getExpenses(){
-    let api = new Api(this.state.authToken);
-    api.getExpenses().then((res) =>{
-      res.json().then((json) => {
-        console.log(json);
-        this.setState({expenses: json["expenses"]})
-      });
-    })
+    if(this.state.authToken !== null){
+      let api = new Api(this.state.authToken);
+      api.getExpenses().then((res) =>{
+        res.json().then((json) => {
+          this.setState({expenses: json["expenses"]})
+        });
+      })
+    }
   }
 
   render(){
