@@ -6,6 +6,8 @@ import {
   ListView,
 } from 'react-native'
 
+import ExpenseListRow from './ExpenseListRow'
+
 class ExpenseList extends Component {
 
   constructor(props){
@@ -25,14 +27,7 @@ class ExpenseList extends Component {
   }
 
   _renderRow(expense){
-    return (
-      <View style={styles.rowContainer}>
-        <Text>{expense.merchant_name}</Text>
-        <Text>{expense.time_of_sale}</Text>
-        <Text>{expense.payment_method_name}</Text>
-        <Text>{expense.amount_in_cents}</Text>
-      </View>
-    )
+    return (<ExpenseListRow expense={expense} />)
   }
 
   _renderSectionHeader(data, sectionId) {
@@ -126,12 +121,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 64,
     backgroundColor: 'lightgrey',
-  },
-  rowContainer: {
-    flex: 1,
-    alignSelf: 'stretch',
-    backgroundColor: 'white',
-    padding: 10,
   },
   listView: {
     flex: 1,
