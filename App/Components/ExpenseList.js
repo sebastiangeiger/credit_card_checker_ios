@@ -11,7 +11,7 @@ class ExpenseList extends Component {
     super(props);
   }
 
-  renderRow(expense){
+  _renderRow(expense){
     return (
       <View style={styles.rowContainer}>
         <Text>{expense.merchant_name}</Text>
@@ -20,6 +20,16 @@ class ExpenseList extends Component {
         <Text>{expense.amount_in_cents}</Text>
       </View>
     )
+  }
+
+  _renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
+    var style = styles.rowSeparator;
+    if (adjacentRowHighlighted) {
+        style = [style, styles.rowSeparatorHide];
+    }
+    return (
+      <View key={"SEP_" + sectionID + "_" + rowID}  style={style}/>
+    );
   }
 
   render(){
@@ -32,7 +42,8 @@ class ExpenseList extends Component {
             style={styles.listView}
             dataSource={dataSource}
             enableEmptySections={true}
-            renderRow={this.renderRow}
+            renderRow={this._renderRow}
+            renderSeparator={this._renderSeparator}
             />
         </View>
       </View>
@@ -50,20 +61,26 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingLeft: 10,
-    paddingRight: 10,
-    marginTop: 74,
+    paddingTop: 74,
+    backgroundColor: 'lightgrey',
   },
   rowContainer: {
     flex: 1,
-    borderTopWidth: 1,
-    borderColor: 'lightgrey',
     alignSelf: 'stretch',
+    backgroundColor: 'white',
+    padding: 10,
   },
   listView: {
     flex: 1,
     alignSelf: 'stretch',
-  }
+  },
+  rowSeparator: {
+    backgroundColor: 'lightgrey',
+    height: 0.5,
+  },
+  rowSeparatorHide: {
+    opacity: 0.0,
+  },
 });
 
 
