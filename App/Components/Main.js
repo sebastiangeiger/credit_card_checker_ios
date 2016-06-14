@@ -47,10 +47,6 @@ class Main extends Component {
   }
 
   setExpenses(expenses){
-    expenses = expenses.map((expense) => {
-      expense.time_of_sale = new Date(expense.time_of_sale);
-      return expense
-    })
     expenses = expenses.sort((a,b) => +(a.time_of_sale < b.time_of_sale) || +(a.time_of_sale === b.time_of_sale) - 1);
     this.setState({expenses: expenses})
     AsyncStorage.setItem('expenses', JSON.stringify(expenses));
