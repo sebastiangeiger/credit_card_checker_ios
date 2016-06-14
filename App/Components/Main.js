@@ -22,9 +22,10 @@ class Main extends Component {
   readAuthTokenFromStorage(){
     AsyncStorage.getItem('authToken')
       .then(authToken => {
-        if(authToken !== null) { this.setState({authToken: authToken}) }
-        })
-      .then(this.getExpenses)
+        if(authToken !== null) {
+          this.setState({authToken: authToken}, this.readExpensesFromStorageAndUpdate);
+        }
+      })
   }
 
   setAuthToken(authToken){
@@ -34,12 +35,25 @@ class Main extends Component {
     })
   }
 
+  readExpensesFromStorageAndUpdate(){
+    if(this.state.authToken !== null){
+      AsyncStorage.getItem('expenses')
+        .then((expenses) => this.setState({expenses: JSON.parse(expenses)}, this.getExpenses))
+    }
+  }
+
+  setExpenses(expenses){
+    this.setState({expenses: expenses})
+    AsyncStorage.setItem('expenses', JSON.stringify(expenses));
+  }
+
   getExpenses(){
+    console.log("getExpenses");
     if(this.state.authToken !== null){
       let api = new Api(this.state.authToken);
       api.getExpenses().then((res) =>{
         res.json().then((json) => {
-          this.setState({expenses: json["expenses"]})
+          this.setExpenses(json["expenses"]);
         });
       })
     }
